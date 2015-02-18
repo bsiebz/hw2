@@ -10,7 +10,7 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all(:select => :rating).map(&:rating).uniq
     @ratings = params[:ratings]
 
-    @movies
+    @movies = Movie.all
     if @ratings != nil
       keys = @ratings.keys
       @movies = Movies.where(:rating => keys)
@@ -33,6 +33,8 @@ class MoviesController < ApplicationController
 
   def new
     # default: render 'new' template
+    @all_ratings = Movie.all_ratings
+    redirect_to movies_path
   end
 
   def create
