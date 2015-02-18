@@ -7,6 +7,7 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @all_ratings = Movie.all(:select => :rating).map(&:rating).uniq
     if params[:sort_by_title] == 'true'
       @movies = Movie.find(:all, :order => 'title')
     elsif params[:sort_by_date] == 'true'
