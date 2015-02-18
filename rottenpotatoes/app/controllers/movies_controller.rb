@@ -15,9 +15,9 @@ class MoviesController < ApplicationController
       keys = @ratings.keys
       @movies = Movie.where(:rating => keys)
       if params[:sort_by] == "title"
-        @movies = Movie.find(:all, :order => 'title').where(:rating => keys)
+        @movies = Movie.order('title').where(:rating => keys)
       elsif params[:sort_by] == "date"
-        @movies = Movie.find(:all, :order => 'release_date').where(:rating => keys)
+        @movies = Movie.order('release_date').where(:rating => keys)
       end
       return @movies
     end
