@@ -14,16 +14,16 @@ class MoviesController < ApplicationController
     if @ratings != nil 
       keys = @ratings.keys
       @movies = Movie.where(:rating => keys)
-      if params[:sort_by_title] == 'true'
+      if params[:sort_by] == "title"
         @movies = Movie.find(:all, :order => 'title').where(:rating => keys)
-      elsif params[:sort_by_date] == 'true'
+      elsif params[:sort_by] == "date"
         @movies = Movie.find(:all, :order => 'release_date').where(:rating => keys)
       end
       return @movies
     end
-    if params[:sort_by_title] == 'true'
+    if params[:sort_by] == "title"
       @movies = Movie.find(:all, :order => 'title')
-    elsif params[:sort_by_date] == 'true'
+    elsif params[:sort_by] == "date"
       @movies = Movie.find(:all, :order => 'release_date')
     end
     return @movies
