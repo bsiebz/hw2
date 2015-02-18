@@ -8,13 +8,27 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.all(:select => :rating).map(&:rating).uniq
-    if params[:sort_by_title] == 'true'
-      @movies = Movie.find(:all, :order => 'title')
-    elsif params[:sort_by_date] == 'true'
-      @movies = Movie.find(:all, :order => 'release_date')
-    else
-      @movies = Movie.all
+    @ratings = params[:ratings]
+
+    @movies = Movie.all
+    if @ratings == nil
+      if params[:sort_by_title] == 'true'
+        @movies = Movie.find(:all, :order => 'title')
+      elsif params[:sort_by_date] == 'true'
+        @movies = Movie.find(:all, :order => 'release_date')
+      else
+        @movies = Movie.all
+      end
+    elsif @ratings != nil
+      keys = @ratings.keys
+      @movies = Movies.where(:rating => keys)
+      if params[:sort_by_title] == 'true'
+        @movies = @movies.where(:rating => keys)
+      elsif params[:sort_by_date] == 'true'
+        @movies = @movies.where(:rating => keys)
+      end
     end
+    return @movies
   end
 
   def new
