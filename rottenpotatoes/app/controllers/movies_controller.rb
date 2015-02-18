@@ -19,10 +19,10 @@ class MoviesController < ApplicationController
       @rating_array = session[:prev_ratings]
     end
 
-    if params[:sort_by].has_key?
+    if params.has_key?(:sort_by)
       @sort = params[:sort_by]
       session[:prev_sort_by] = @sort
-    elsif session[:prev_sort_by].has_key?
+    elsif session.has_key?(:prev_sort_by)
       @sort = session[:prev_sort_by]
       params[:sort_by] = @sort
     else
