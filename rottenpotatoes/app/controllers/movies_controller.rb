@@ -8,37 +8,24 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.all(:select => :rating).map(&:rating).uniq
-    @ratings = Array.new
+    @ratings = params[:ratings]
     @movies = Movie.all
-    @sort = nil
 
-    if params[:ratings] != nil
-      @ratings = params[:ratings].keys
+    if @ratings != nil 
+      keys = @ratings.keys
       session[:prev_ratings] = @ratings
-    elsif session[:prev_ratings] != nil
-      @ratings = session[:prev_ratings]
-      params[:ratings] = @ratings
-    else
-      @ratings = @all_ratings
+      @movies = Movie.where(:rating => keys)
+      if params[:sort_by] == "title"
+        @movies = Movie.order('title').where(:rating => keys)
+      elsif params[:sort_by] == "release_date"
+        @movies = Movie.order('release_date').where(:rating => keys)
+      end
+      return @movies
     end
-
-    if params.has_key?(:sort_by)
-      @sort = params[:sort_by]
-      session[:prev_sort_by] = @sort
-    elsif session.has_key?(:prev_sort_by)
-      @sort = session[:prev_sort_by]
-      params[:sort_by] = @sort
-    else
-      @sort = nil
-    end
-
-
-    if @sort == "title"
-      @movies = Movie.order('title').where(:rating => @ratings)
-    elsif @sort == "release_date"
-      @movies = Movie.order('release_date').where(:rating => @ratings)
-    else
-      @movies = Movie.where(:rating => @ratings)
+    if params[:sort_by] == "title"
+      @movies = Movie.find(:all, :order => 'title')
+    elsif params[:sort_by] == "release_date"
+      @movies = Movie.find(:all, :order => 'release_date')
     end
     return @movies
   end
