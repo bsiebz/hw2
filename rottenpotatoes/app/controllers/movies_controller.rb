@@ -8,15 +8,15 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.all(:select => :rating).map(&:rating).uniq
-    @rating_arrary = Array.new
+    @rating_array = Array.new
     @movies = Movie.all
     @sort = nil
 
     if params[:ratings] != nil
-      @rating_arrary = params[:ratings]
-      session[:prev_ratings] = @rating_arrary
+      @rating_array = params[:ratings]
+      session[:prev_ratings] = @rating_array
     elsif session[:prev_ratings] != nil
-      @rating_arrary = session[:prev_ratings]
+      @rating_array = session[:prev_ratings]
     end
 
     if params[:sort_by].has_key?
@@ -31,11 +31,11 @@ class MoviesController < ApplicationController
 
 
     if @sort == "title"
-      @movies = Movie.order('title').where(:rating => @rating_arrary)
+      @movies = Movie.order('title').where(:rating => @rating_array)
     elsif @sort == "release_date"
-      @movies = Movie.order('release_date').where(:rating => @rating_arrary)
+      @movies = Movie.order('release_date').where(:rating => @rating_array)
     else
-      @movies = Movie.where(:rating => @rating_arrary})
+      @movies = Movie.where(:rating => @rating_array)
     end
     return @movies
   end
