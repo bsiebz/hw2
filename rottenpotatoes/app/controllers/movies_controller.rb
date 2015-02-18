@@ -13,7 +13,7 @@ class MoviesController < ApplicationController
     @sort = nil
 
     if params[:ratings] != nil
-      @rating_array = params[:ratings]
+      @rating_array = params[:ratings].keys
       session[:prev_ratings] = @rating_array
     elsif session[:prev_ratings] != nil
       @rating_array = session[:prev_ratings]
